@@ -1,0 +1,1 @@
+../prucam_rpmsg_0/pru_camera_reg.h
