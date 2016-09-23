@@ -1,0 +1,14 @@
+# kdevelop project file
+*.kdev*
+.kdev*/
+
+# generated files
+*.d
+*.pp
+*.lst
+*.xml
+*.obj
+*.map
+*.opt
+*.out
+*.swp
