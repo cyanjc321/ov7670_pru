@@ -12,3 +12,8 @@
 *.opt
 *.out
 *.swp
+*.dwo
+*.ko*
+*.o*
+*.mod*
+*.symvers
