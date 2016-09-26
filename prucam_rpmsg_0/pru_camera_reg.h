@@ -33,10 +33,10 @@ int prucam_buf_queue(unsigned int pt);
 #if defined (pru0) || defined (pru1)
 volatile __far uint32_t CT_BUFQ[16] __attribute__((cregister("PRU_SHAREDMEM", near), peripheral));
 
-#define ACQ_EN		0
+#define ACQ_EN		0x1
 
 //interrupts
-#define MSG_INT		18	//map to host 0
+#define MSG_INT		18	//map to host 1
 #define ARM_INT		19	//map to host 2
 
 #ifdef __cplusplus
