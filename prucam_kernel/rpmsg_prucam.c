@@ -87,6 +87,8 @@ int prucam_reg_read(unsigned int addr, unsigned int *data) {
 		return -EBADMSG;
 
 	*data = query.data;
+	dev_info(&rp_prucam->dev, "read reg@%x: %d.\n", addr, *data);
+
 	return ret;
 }
 EXPORT_SYMBOL(prucam_reg_read);
@@ -98,6 +100,8 @@ int prucam_reg_write(unsigned int addr, unsigned int data) {
 	query.op = reg_write;
 	query.addr = addr;
 	query.data = data;
+
+	dev_info(&rp_prucam->dev, "setting reg@%x to %d.\n", addr, data);
 
 	ret = rpmsg_prucam_io(rp_prucam, &query);
 
@@ -115,6 +119,8 @@ int prucam_buf_queue(unsigned int pt) {
 	query.op = reg_write;
 	query.addr = REG_BUFPT;
 	query.data = pt;
+
+	dev_info(&rp_prucam->dev, "queueing buffer@%x to PRU.\n", pt);
 
 	ret = rpmsg_prucam_io(rp_prucam, &query);
 

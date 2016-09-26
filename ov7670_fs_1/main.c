@@ -105,14 +105,16 @@ void main(void) {
 			CT_INTC.SICR = MSG_INT;	//clear interrupt here
 		}
 
-		if (ctrl & ACQ_EN)
+		if (ctrl)
 			while (!(__R31 & BIT(30))) {
 				buffer_addr = next_buffer;
+				DEBUG_TO_MEM(buffer_addr);
 				next_buffer = 0;
 				if (!buffer_addr) break;
 				image_acquisition((void *)buffer_addr);
 				__R31 = ARM_INT + 16; //interrupt arm
 				frame_no ++;
+				DEBUG_TO_MEM(frame_no);
 			}
 	}
 

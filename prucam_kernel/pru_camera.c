@@ -133,6 +133,7 @@ static void prucam_reset(struct pru_camera *cam) { //consider doing soft reset i
     spin_lock_irqsave(&cam->dev_lock, flags);
     gpio_set_value(cam->rst_pin, 1);
     spin_unlock_irqrestore(&cam->dev_lock, flags);
+	dev_info(cam->dev, "camera reset done\n");
 }
 
 static void prucam_ctrl_power_up(struct pru_camera *cam) {
@@ -141,6 +142,7 @@ static void prucam_ctrl_power_up(struct pru_camera *cam) {
     spin_lock_irqsave(&cam->dev_lock, flags);
     gpio_set_value(cam->pwdn_pin, 0);
     spin_unlock_irqrestore(&cam->dev_lock, flags);
+	dev_info(cam->dev, "camera powered up\n");
 }
 
 static void prucam_ctrl_power_down(struct pru_camera *cam) {
@@ -149,13 +151,16 @@ static void prucam_ctrl_power_down(struct pru_camera *cam) {
     spin_lock_irqsave(&cam->dev_lock, flags);
     gpio_set_value(cam->pwdn_pin, 1);
     spin_unlock_irqrestore(&cam->dev_lock, flags);
+	dev_info(cam->dev, "camera powered off\n");
 }
 
 static int prucam_ctrl_start(struct pru_camera *cam) {
+	dev_info(cam->dev, "pru frame grabber enabled\n");
 	return prucam_reg_write(REG_CTRL, 1);
 }
 
 static int prucam_ctrl_stop(struct pru_camera *cam) {
+	dev_info(cam->dev, "pru frame grabber disabled\n");
     return prucam_reg_write(REG_CTRL, 0);
 }
 
@@ -224,12 +229,14 @@ static int prucam_vb_start_streaming(struct vb2_queue *vq, unsigned int count)
     else {							// have buffers, so get the first to pru and remove it for queue
         pvb = list_first_entry(&cam->buffers, struct prucam_vb_buffer, queue);
         list_del_init(&pvb->queue);
+		pvb->dma_desc_pa = vb2_dma_contig_plane_dma_addr(&pvb->vb_buf, 0);
         prucam_buf_queue(pvb->dma_desc_pa);
         cam->vb_bufs[0] = pvb;
 
         if (list_empty(&cam->buffers)) {	//run it the second time to queue send one additional to pru if available
             pvb = list_first_entry(&cam->buffers, struct prucam_vb_buffer, queue);
             list_del_init(&pvb->queue);
+			pvb->dma_desc_pa = vb2_dma_contig_plane_dma_addr(&pvb->vb_buf, 0);
             prucam_buf_queue(pvb->dma_desc_pa);
             cam->vb_bufs[1] = pvb;
         }
@@ -313,6 +320,7 @@ static int prucam_vidioc_streamon(struct file *filp, void *priv, enum v4l2_buf_t
     mutex_lock(&cam->s_mutex);
     ret = vb2_streamon(&cam->vb_queue, type);
     mutex_unlock(&cam->s_mutex);
+	cam->state = S_STREAMING;
     return ret;
 }
 
@@ -324,6 +332,7 @@ static int prucam_vidioc_streamoff(struct file *filp, void *priv, enum v4l2_buf_
     mutex_lock(&cam->s_mutex);
     ret = vb2_streamoff(&cam->vb_queue, type);
     mutex_unlock(&cam->s_mutex);
+	cam->state = S_IDLE;
     return ret;
 }
 
@@ -645,6 +654,7 @@ static int prucam_v4l_open(struct file *filp) {
 //    cam->frame_state.frames = 0;
 //    cam->frame_state.singles = 0;
 //    cam->frame_state.delivered = 0;
+	cam->state = S_IDLE;
     mutex_lock(&cam->s_mutex);
     if (cam->users == 0) {
         ret = prucam_setup_vb2(cam);
@@ -807,6 +817,8 @@ static irqreturn_t prucam_irq(int irq, void *data) {
 	pr_info("serving prucam_irq, sequence# %d\n", cam->sequence);
 
 	pvb = cam->vb_bufs[0];
+	if (!pvb) return IRQ_RETVAL(1);
+
 	prucam_buffer_done(cam, &pvb->vb_buf, cam->sequence);
 	cam->vb_bufs[0] = 0;
 	if (cam->vb_bufs[1]) {
@@ -817,6 +829,7 @@ static irqreturn_t prucam_irq(int irq, void *data) {
 	if (!list_empty(&cam->buffers)) {			//still have buffers available in queue, used it for next frame
 		pvb = list_first_entry(&cam->buffers, struct prucam_vb_buffer, queue);
 		list_del_init(&pvb->queue);
+		pvb->dma_desc_pa = vb2_dma_contig_plane_dma_addr(&pvb->vb_buf, 0);
 		prucam_buf_queue(pvb->dma_desc_pa);
 		if (cam->vb_bufs[0])
 			cam->vb_bufs[1] = pvb;
