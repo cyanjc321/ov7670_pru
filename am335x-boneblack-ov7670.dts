@@ -1,0 +1,76 @@
+/*
+ * Copyright (C) 2012 Texas Instruments Incorporated - http://www.ti.com/
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 as
+ * published by the Free Software Foundation.
+ */
+/dts-v1/;
+
+#include "am33xx.dtsi"
+#include "am335x-bone-common.dtsi"
+#include "am33xx-overlay-edma-fix.dtsi"
+#include <dt-bindings/board/am335x-bbw-bbb-base.h>
+
+/* #include "am335x-bone-jtag.dtsi" */
+
+/ {
+	model = "TI AM335x BeagleBone Black";
+	compatible = "ti,am335x-bone-black", "ti,am335x-bone", "ti,am33xx";
+};
+
+&ldo3_reg {
+	regulator-min-microvolt = <1800000>;
+	regulator-max-microvolt = <1800000>;
+	regulator-always-on;
+};
+
+&mmc1 {
+	vmmc-supply = <&vmmcsd_fixed>;
+};
+
+&mmc2 {
+	vmmc-supply = <&vmmcsd_fixed>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&emmc_pins>;
+	bus-width = <8>;
+	status = "okay";
+};
+
+&sgx {
+	status = "okay";
+};
+
+&am33xx_pinmux {
+	ov7670_pru_pins: ov7670_pru_pins {
+		pinctrl-single,pins = <
+			BONE_P8_27 (PIN_INPUT_PULLUP | MUX_MODE6)		/* lcd_vsync.pru1_r31_8 */
+			BONE_P8_28 (PIN_INPUT_PULLUP | MUX_MODE6)		/* lcd_pclk.pru1_r31_10 */
+			BONE_P8_29 (PIN_INPUT_PULLUP | MUX_MODE6)		/* lcd_hsync.pru1_r31_9 */
+			BONE_P8_30 (PIN_INPUT_PULLUP | MUX_MODE6)       /* lcd_de.pru1_r31_11 */
+			BONE_P8_39 (PIN_INPUT_PULLUP | MUX_MODE6)		/* lcd_data6.pru1_r31_6 */
+			BONE_P8_40 (PIN_INPUT_PULLUP | MUX_MODE6)		/* lcd_data7.pru1_r31_7 */
+			BONE_P8_41 (PIN_INPUT_PULLUP | MUX_MODE6)		/* lcd_data4.pru1_r31_4 */
+			BONE_P8_42 (PIN_INPUT_PULLUP | MUX_MODE6)		/* lcd_data5.pru1_r31_5 */
+			BONE_P8_43 (PIN_INPUT_PULLUP | MUX_MODE6)		/* lcd_data2.pru1_r31_2 */
+			BONE_P8_44 (PIN_INPUT_PULLUP | MUX_MODE6)		/* lcd_data3.pru1_r31_3 */
+
+			BONE_P8_46 (PIN_OUTPUT_PULLDOWN | MUX_MODE5)	/* lcd_data1.pru1_r30_1 */
+
+			BONE_P9_26 (PIN_INPUT_PULLUP | MUX_MODE6)		/* uar1_rxd.pru1_r31_16 */
+
+			BONE_P8_31 (PIN_OUTPUT_PULLUP | MUX_MODE7)      /* lcd_data14.gpio0_10 */
+			BONE_P8_32 (PIN_OUTPUT_PULLUP | MUX_MODE7)      /* lcd_data15.gpio0_11 */
+			BONE_P8_37 (PIN_OUTPUT_PULLUP | MUX_MODE7)		/* lcd_data8.gpio2_14 */
+			BONE_P8_38 (PIN_OUTPUT_PULLUP | MUX_MODE7)		/* lcd_data9.gpio2_15 */
+		>;
+	};
+};
+
+&pruss {
+	status = "okay";
+
+	pinctrl-names = "default";
+	pinctrl-0 = <&ov7670_pru_pins>;
+};
+
