@@ -17,3 +17,5 @@
 *.o*
 *.mod*
 *.symvers
+main.asm
+prucam_test
