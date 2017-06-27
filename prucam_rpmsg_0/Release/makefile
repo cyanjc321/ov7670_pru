@@ -2,8 +2,6 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-CG_TOOL_ROOT := /home/cjiang/opt/ti-cgt-pru_2.1.2
-
 GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG :=
 
@@ -12,7 +10,7 @@ ORDERED_OBJS += \
 "./prucam_reg_io.obj" \
 "../AM335x_PRU.cmd" \
 $(GEN_CMDS__FLAG) \
--l"/home/cjiang/opt/ti-processor-sdk-linux-am335x-evm-03.00.00.04/example-applications/pru-icss-4.0.2/lib/rpmsg_lib.lib" \
+-l"$(PRU_PACKAGE_PATH)/lib/rpmsg_lib.lib" \
 -llibc.a \
 
 -include ../makefile.init
@@ -139,13 +137,13 @@ all: PRUCAM_RPMsg_0.out
 PRUCAM_RPMsg_0.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: PRU Linker'
-	"/home/cjiang/opt/ti-cgt-pru_2.1.2/bin/clpru" -v3 -O2 --define=am3359 --define=pru0 --diag_wrap=off --diag_warning=225 --display_error_number --endian=little --hardware_mac=on -k --asm_listing --cross_reference -z -m"PRUCAM_RPMsg_0.map" --stack_size=0x100 --heap_size=0x100 -i"/home/cjiang/opt/ti-cgt-pru_2.1.2/lib" -i"/home/cjiang/opt/ti-cgt-pru_2.1.2/include" --reread_libs --define=PRU_CORE=1 --diag_wrap=off --display_error_number --warn_sections --xml_link_info="PRUCAM_RPMsg_0_linkInfo.xml" --rom_model -o "PRUCAM_RPMsg_0.out" $(ORDERED_OBJS)
+	"$(CG_TOOL_ROOT)/bin/clpru" -v3 -O2 --define=am3359 --define=pru0 --diag_wrap=off --diag_warning=225 --display_error_number --endian=little --hardware_mac=on -k --asm_listing --cross_reference -z -m"PRUCAM_RPMsg_0.map" --stack_size=0x100 --heap_size=0x100 -i"$(CG_TOOL_ROOT)/lib" -i"$(CG_TOOL_ROOT)/include" --reread_libs --define=PRU_CORE=1 --diag_wrap=off --display_error_number --warn_sections --xml_link_info="PRUCAM_RPMsg_0_linkInfo.xml" --rom_model -o "PRUCAM_RPMsg_0.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 PRUCAM_RPMsg_0.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: PRU Hex Utility'
-	"/home/cjiang/opt/ti-cgt-pru_2.1.2/bin/hexpru"  -o "PRUCAM_RPMsg_0.hex" $(EXE_OUTPUTS__QUOTED)
+	"$(CG_TOOL_ROOT)/bin/hexpru"  -o "PRUCAM_RPMsg_0.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 

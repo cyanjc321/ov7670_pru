@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -l"/home/cjiang/opt/ti-processor-sdk-linux-am335x-evm-03.00.00.04/example-applications/pru-icss-4.0.2/lib/rpmsg_lib.lib" -llibc.a
+LIBS := -l"$(PRU_PACKAGE_PATH)/lib/rpmsg_lib.lib" -llibc.a
 

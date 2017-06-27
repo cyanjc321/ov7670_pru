@@ -1,0 +1,3 @@
+CG_TOOL_ROOT := /home/cjiang/opt/ti-cgt-pru_2.1.5
+PRU_PACKAGE_PATH := /home/cjiang/opt/ti-processor-sdk-linux-am335x-evm-03.03.00.04/example-applications/pru-icss-5.1.0
+

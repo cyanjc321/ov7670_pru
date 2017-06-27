@@ -2,8 +2,6 @@
 # Automatically-generated file. Do not edit!
 ################################################################################
 
-CG_TOOL_ROOT := /home/cjiang/opt/ti-cgt-pru_2.1.2
-
 GEN_OPTS__FLAG :=
 GEN_CMDS__FLAG :=
 
@@ -141,13 +139,13 @@ all: ov7670_fs_1.out
 ov7670_fs_1.out: $(OBJS) $(CMD_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: PRU Linker'
-	"/home/cjiang/opt/ti-cgt-pru_2.1.2/bin/clpru" -v3 -O2 --define=am3359 --define=pru0 --diag_wrap=off --diag_warning=225 --display_error_number --endian=little --hardware_mac=on -z -m"ov7670_fs_1.map" --stack_size=0x100 --heap_size=0x100 -i"/home/cjiang/opt/ti-cgt-pru_2.1.2/lib" -i"/home/cjiang/opt/ti-cgt-pru_2.1.2/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="ov7670_fs_1_linkInfo.xml" --rom_model -o "ov7670_fs_1.out" $(ORDERED_OBJS)
+	"$(CG_TOOL_ROOT)/bin/clpru" -v3 -O2 --define=am3359 --define=pru0 --diag_wrap=off --diag_warning=225 --display_error_number --endian=little --hardware_mac=on -z -m"ov7670_fs_1.map" --stack_size=0x100 --heap_size=0x100 -i"$(CG_TOOL_ROOT)/lib" -i"$(CG_TOOL_ROOT)/include" --reread_libs --diag_wrap=off --display_error_number --warn_sections --xml_link_info="ov7670_fs_1_linkInfo.xml" --rom_model -o "ov7670_fs_1.out" $(ORDERED_OBJS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 ov7670_fs_1.hex: $(EXE_OUTPUTS)
 	@echo 'Invoking: PRU Hex Utility'
-	"/home/cjiang/opt/ti-cgt-pru_2.1.2/bin/hexpru"  -o "ov7670_fs_1.hex" $(EXE_OUTPUTS__QUOTED)
+	"$(CG_TOOL_ROOT)/bin/hexpru"  -o "ov7670_fs_1.hex" $(EXE_OUTPUTS__QUOTED)
 	@echo 'Finished building: $@'
 	@echo ' '
 
