@@ -17,7 +17,7 @@
 #include "resource_table_empty.h"
 
 #include "pru_ddr_burst.h"
-#include "pru_camera_reg.h"
+#include "../prucam_rpmsg_0/pru_camera_reg.h"
 
 volatile register uint32_t __R30;
 volatile register uint32_t __R31;
